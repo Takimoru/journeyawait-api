@@ -1,0 +1,20 @@
+[
+    {
+        "id": "1",
+        "name": "Soire",
+        "artist": "Hoshimachi Suisei",
+        "price": 100
+    },
+    {
+        "id": "2",
+        "name": "Fanfare",
+        "artist": "Sakura Miko",
+        "price": 200
+    },
+    {
+        "id": "3",
+        "name": "RapGOD",
+        "artist": "James Arthur",
+        "price": 300
+    }
+]
