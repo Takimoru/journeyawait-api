@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/e32a59c8-91ed-4b8f-8888-e5100aee059d/console.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/web-service-gin/main.go" dialect="MySQL" />
+  </component>
+</project>

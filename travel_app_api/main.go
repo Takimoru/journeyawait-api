@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"net/http"
+	"os"
 )
 
 type user struct {
@@ -16,7 +17,13 @@ type user struct {
 }
 
 func dbConn() (db *sql.DB) {
-	db, err := sql.Open("mysql", "root:1234@tcp(127.0.0.1:3306)/traveldb")
+	dbHost := os.Getenv("DB_HOST")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", dbUser, dbPassword, dbHost, dbName)
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		panic(err.Error())
 	}
