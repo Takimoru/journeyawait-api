@@ -3,11 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
+	"os"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"net/http"
-	"os"
 )
 
 type user struct {
@@ -27,6 +28,19 @@ func dbConn() (db *sql.DB) {
 	if err != nil {
 		panic(err.Error())
 	}
+
+	// Create users table if it does not exist
+	createTableQuery := `
+	CREATE TABLE IF NOT EXISTS users (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		name VARCHAR(255) NOT NULL,
+		password VARCHAR(255) NOT NULL
+	);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		panic(err.Error())
+	}
+
 	return db
 }
 
@@ -36,9 +50,14 @@ func main() {
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowMethods: []string{"*"},
 		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))
+
+	router.GET("", func(c *gin.Context) {
+		htmlContent := "<img style='display: block; margin: auto;' src='https://cdn.epicstream.com/images/ncavvykf/epicstream/a54b9c16f0f9e2de831b32febc169e734e4ded3d-1920x1080.png?rect=0,36,1920,1008&w=1200&h=630&auto=format'/>"
+		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
+	})
 
 	router.GET("/user/:id", getUser)
 	router.POST("/register", postUser)
