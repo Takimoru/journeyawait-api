@@ -1,32 +1,31 @@
-# Menggunakan golang image resmi untuk build aplikasi
-FROM golang:1.18 AS builder
+# Use golang base image with specified version
+FROM golang:1.22.2-alpine3.19 AS build
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
+# Copy go.mod and go.sum files to the container
+COPY go.mod .
+COPY go.sum .
 
 # Download dependencies
 RUN go mod download
 
-# Copy source code
+# Copy the rest of the application source code to the container
 COPY . .
 
-# Build aplikasi
+# Build the Go app
 RUN go build -o main .
 
-# Menyiapkan image yang lebih kecil untuk menjalankan aplikasi
-FROM alpine:latest
+# Start a new stage from scratch
+FROM alpine:3.19
 
-# Install dependencies yang dibutuhkan
-RUN apk --no-cache add ca-certificates
+# Set the working directory inside the container
+WORKDIR /root
 
-# Set working directory
-WORKDIR /root/
+# Copy the compiled executable from the previous stage
+COPY --from=build /app/main .
 
-# Copy executable dari tahap build sebelumnya
-COPY --from=builder /app/main .
 
-# Menjalankan aplikasi
+# Command to run the executable
 CMD ["./main"]
