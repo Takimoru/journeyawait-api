@@ -17,6 +17,9 @@ COPY . .
 # Build the Go app
 RUN go build -o main .
 
+# Verify that the main executable was created
+RUN ls -l main
+
 # Start a new stage from scratch
 FROM alpine:3.19
 
@@ -26,6 +29,8 @@ WORKDIR /root
 # Copy the compiled executable from the previous stage
 COPY --from=build /app/main .
 
+# Verify that the main executable was copied
+RUN ls -l main
 
 # Command to run the executable
 CMD ["./main"]
